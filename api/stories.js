@@ -21,6 +21,19 @@ router.get('/', async (req, res) => {
 })
 
 // Get single story
+router.get('/:id', async (req, res) => {
+    const id  = req.params.id;
+    try{
+
+     const Story = await Stories.findById(id)
+ 
+     Story
+     ? res.status(200).json(Story)
+     : res.status(404).json({error:"Story not found"})
+    }catch (error){
+     console.log(error)
+    }
+ })
 
 // Post(add) new story
 // api/stories/
