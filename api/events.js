@@ -3,11 +3,11 @@ const mongoose = require('mongoose')
 const router = express.Router();
 const Events = require("../model/events");
 
-//fetch from /api/events
+//fetch from /api/events, all events
 router.get('/', async (req, res) => {
-    //res.json({mssg: `GET events`});
 
     try {
+        //find all events
       const allEvents = await Events.find({});
       
       //if all events exist, returns them. Else return error
@@ -16,6 +16,26 @@ router.get('/', async (req, res) => {
       : res.status(404).send("Events not found");
     } catch (error) {
         console.log("get all event error: \n", error);
+    }
+ })
+
+//fetch single event 
+router.get('/:id', async (req, res) => {
+    const id  = req.params.id;
+
+    //checks if objectId exist
+    if(!mongoose.Types.ObjectId.isValid(id)){
+        return res.status(404).json({error:"Event not found"});
+    }
+
+    try{
+        const event = await Events.findById(id)
+    
+        event
+        ? res.status(200).json(event)
+        : res.status(404).json({error:"Event not found"})
+    }catch (error){
+     console.log("fetch single event error: \n", error)
     }
  })
 
