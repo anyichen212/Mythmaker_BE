@@ -62,5 +62,27 @@ router.delete('/:id', async (req, res) => {
 })
 
 // Patch(update) story
+router.patch('/:id', async (req, res) => {
+    const id = req.params.id;
+
+    //checks if objectId exist
+    if(!mongoose.Types.ObjectId.isValid(id)){
+        return res.status(404).json({error:"Story not found"});
+    }
+
+    try {
+        const Story = await Stories.findOneAndUpdate({_id : id}, {
+            ...req.body
+        })
+
+        // detect if story update exist
+        Story
+        ? res.status(200).json(Story)
+        : res.status(404).json({error:"Story not found"})
+    } catch (error) {
+        console.log(error);
+    }
+    
+})
 
 module.exports = router;
