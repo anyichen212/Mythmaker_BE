@@ -21,8 +21,15 @@ router.get('/', async (req, res) => {
 })
 
 // Get single story
+// api/stories/:id
 router.get('/:id', async (req, res) => {
     const id  = req.params.id;
+
+    //checks if objectId exist
+    if(!mongoose.Types.ObjectId.isValid(id)){
+        return res.status(404).json({error:"Story not found"});
+    }
+
     try{
 
      const Story = await Stories.findById(id)
@@ -36,7 +43,7 @@ router.get('/:id', async (req, res) => {
  })
 
 // Post(add) new story
-// api/stories/
+// api/stories
 router.post('/', async (req, res) => {
     const { title, currentEvent, creatorId } = req.body
 
@@ -49,8 +56,15 @@ router.post('/', async (req, res) => {
 })
 
 // Delete story 
+// api/stories/:id
 router.delete('/:id', async (req, res) => {
     const id  = req.params.id;
+
+    //checks if objectId exist
+    if(!mongoose.Types.ObjectId.isValid(id)){
+        return res.status(404).json({error:"Story not found"});
+    }
+
     try {
         const storyToDelete = await Stories.deleteOne({_id:id});
         res.status(201).send("Deleted Successfully : ").json(storyToDelete);
@@ -62,5 +76,27 @@ router.delete('/:id', async (req, res) => {
 })
 
 // Patch(update) story
+router.patch('/:id', async (req, res) => {
+    const id = req.params.id;
+
+    //checks if objectId exist
+    if(!mongoose.Types.ObjectId.isValid(id)){
+        return res.status(404).json({error:"Story not found"});
+    }
+
+    try {
+        const Story = await Stories.findOneAndUpdate({_id : id}, {
+            ...req.body
+        })
+
+        // detect if story update exist
+        Story
+        ? res.status(200).json(Story)
+        : res.status(404).json({error:"Story not found"})
+    } catch (error) {
+        console.log(error);
+    }
+    
+})
 
 module.exports = router;
