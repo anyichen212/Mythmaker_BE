@@ -4,8 +4,20 @@ const mongoose = require('mongoose')
 const router = express.Router();
 
 // fetch from api/stories/
-router.get('/', (req, res) => {
-    res.json({mssg: `GET stories`})
+router.get('/', async (req, res) => {
+   // res.json({mssg: `GET stories`})
+   try{
+    //the {} will return ALL stories
+    // .sort sorts the stories 
+    //-1 lists stories in descending order/newest first
+    const allStories = await Stories.find({}).sort({createdAt: -1})
+
+    allStories
+    ? res.status(200).json(allStories)
+    : res.status(404).send("Stories not found")
+   }catch (error){
+    console.log(error)
+   }
 })
 
 // Get single story
