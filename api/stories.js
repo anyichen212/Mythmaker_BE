@@ -89,7 +89,7 @@ router.patch('/:id', async (req, res) => {
             ...req.body
         })
 
-        // detect if story update exist
+        // detect if story update exist(return story before update)
         Story
         ? res.status(200).json(Story)
         : res.status(404).json({error:"Story not found"})
