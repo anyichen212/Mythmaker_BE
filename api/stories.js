@@ -98,4 +98,38 @@ router.patch('/:id', async (req, res) => {
     
 })
 
+//add character to the story
+// api/stories/:storyId/:characterId
+router.patch('/:storyId/:characterId', async (req,res) => {
+    const {storyId, characterId} = req.params;
+
+    //check if objectId exist
+    if(!mongoose.Types.ObjectId.isValid(storyId) || !mongoose.Types.ObjectId.isValid(characterId) ){
+        return res.status(404).json({error:"Story or Character not found"});
+    }
+
+    try {
+        //find the story by the id 
+        const story = await Stories.findById(storyId);
+
+        //if story not found
+        if(!story){
+            return res.status(404).json({error: "Story not found"});
+        }
+
+        //append characterId to the story's characterId array
+        story.characters.push(characterId);
+
+        //save the updated history
+        const updatedStory = await story.save();
+
+        //return the updated story
+        res.status(200).json(updatedStory);
+    } catch (error) {
+        console.error(error);
+    }
+
+});
+
+
 module.exports = router;
