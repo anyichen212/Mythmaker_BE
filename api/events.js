@@ -43,10 +43,10 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
 
     //datas received
-    const { name, text, characterId, options } = req.body
+    //const { name, text, characterId, option1, option2, option3 } = req.body
 
     try {
-        const event = await Events.create({ name, text, characterId, options });
+        const event = await Events.create(req.body);
         res.status(200).json(event);
     } catch (error) {
         res.status(400).json({error: error.message});
@@ -67,6 +67,30 @@ router.delete('/:id', async (req, res) => {
     } catch (error) {
         console.log("Delete Event Error : \n", error);
     }
+})
+
+// Patch(update) event by id
+router.patch('/:id', async (req, res) => {
+    const id = req.params.id;
+
+    //checks if objectId exist
+    if(!mongoose.Types.ObjectId.isValid(id)){
+        return res.status(404).json({error:"Story not found"});
+    }
+
+    try {
+        const event = await Events.findOneAndUpdate({_id : id}, {
+            ...req.body
+        })
+
+        // detect if event update exist(return event before update)
+        event
+        ? res.status(200).json(event)
+        : res.status(404).json({error:"Story not found"})
+    } catch (error) {
+        console.log(error);
+    }
+    
 })
 
 module.exports = router;

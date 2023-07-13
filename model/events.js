@@ -22,10 +22,17 @@ const eventSchema = new Schema({
         type: Number,
         required: true,
     },
-    options: {
-        type: [optionSchema],
+    option1: {
+        type: optionSchema,
         required: true,
+    },
+    option2: {
+        type: optionSchema,
+    },
+    option3: {
+        type: optionSchema,
     }
+
 }, { timestamps: true });
 
 module.exports = mongoose.model('Events', eventSchema);
