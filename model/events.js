@@ -6,9 +6,10 @@ const Schema = mongoose.Schema;
 const optionSchema = new Schema({
     name: String,
     text: String,
-    next: Number //change to objectId
+    next: { type: mongoose.Schema.Types.ObjectId, ref: 'events'} //change to objectId
 })
 
+// ADD IN FRONT END - insert storyId into event.storyId && append eventId into story.events whenever a new event is created
 // events schema model
 const eventSchema = new Schema({
     name: {
@@ -31,6 +32,10 @@ const eventSchema = new Schema({
     },
     option3: {
         type: optionSchema,
+    },
+    storyId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Stories',
     }
 
 }, { timestamps: true });

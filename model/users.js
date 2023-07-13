@@ -18,8 +18,9 @@ const userSchema = new Schema({
         required: true
     },
     storyIds: {
-        type: [Number],
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'Stories',
     }
-}, { timestamps: true });
+});
 
 module.exports = mongoose.model('Users', userSchema);
