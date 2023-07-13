@@ -9,9 +9,11 @@ router.get('/', async (req, res) => {
    try{
     //the {} will return ALL Characters
     // .sort sorts the Characters 
-    //-1 lists Characters in descending order/newest first
+    //1 lists Characters in alpha order by name
     const allCharacters = await Characters.find({}).sort({name: 1})
 
+    //if allCharacters is successfully fetched, return them
+    //if not, display error message
     allCharacters
     ? res.status(200).json(allCharacters)
     : res.status(404).send("Characters not found")

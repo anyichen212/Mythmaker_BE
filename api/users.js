@@ -12,6 +12,8 @@ router.get('/', async (req, res) => {
     //-1 lists Users in descending order/newest first
     const allUsers = await Users.find({}).sort({createdAt: -1})
 
+    //if allUsers is successfully fetched, return them
+    //if not, display error message
     allUsers
     ? res.status(200).json(allUsers)
     : res.status(404).send("Users not found")
