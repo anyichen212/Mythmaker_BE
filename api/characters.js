@@ -55,7 +55,7 @@ router.delete('/:id', async (req, res) => {
     try {
         const CharacterToDelete = await Characters.deleteOne({_id:id});
         res.send("Deleted Successfully")
-        res.status(201).json(CharacterToDelete);
+       // res.status(201).json(CharacterToDelete);
     } catch (error) {
         console.log(error);
         res.status(400).json({error: error.message});
