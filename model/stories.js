@@ -12,13 +12,13 @@ const storySchema = new Schema({
     },
     events: {
         type: [mongoose.Schema.Types.ObjectId],
-        ref: 'Events',
+        ref: 'Events', //refrence from events model, auto detects if objectId is a existing one that belongs to events
         //autopopulate: true,
     },
     //append character id manuelly 
     characters: {
         type: [mongoose.Schema.Types.ObjectId],
-        ref: 'characters',
+        ref: 'characters', //refrence from characters model
         autopopulate: true,
     },
     //insert and change event id manuelly
@@ -30,7 +30,7 @@ const storySchema = new Schema({
     //insert creator id manuelly
     creatorId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Users',
+        ref: 'Users', //ref from users model
         required: true,
         autopopulate: true
     }

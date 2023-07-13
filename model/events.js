@@ -6,7 +6,7 @@ const Schema = mongoose.Schema;
 const optionSchema = new Schema({
     name: String,
     text: String,
-    next: { type: mongoose.Schema.Types.ObjectId, ref: 'events'} //change to objectId
+    next: { type: mongoose.Schema.Types.ObjectId, ref: 'Events'} //fetch for objectId in events
 })
 
 // ADD IN FRONT END - insert storyId into event.storyId && append eventId into story.events whenever a new event is created
@@ -20,8 +20,10 @@ const eventSchema = new Schema({
         required: true,
     },
     characterId: {
-        type: Number,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "characters",
         required: true,
+        autopopulate: true,
     },
     option1: {
         type: optionSchema,
@@ -40,4 +42,6 @@ const eventSchema = new Schema({
 
 }, { timestamps: true });
 
+//fetch characters data from character collections when autopopulate is set to true
+eventSchema.plugin(require('mongoose-autopopulate'));
 module.exports = mongoose.model('Events', eventSchema);

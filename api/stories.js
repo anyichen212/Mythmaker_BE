@@ -45,10 +45,9 @@ router.get('/:id', async (req, res) => {
 // Post(add) new story
 // api/stories
 router.post('/', async (req, res) => {
-    const { title, currentEvent, creatorId } = req.body
 
     try {
-        const story = await Stories.create({ title, currentEvent, creatorId });
+        const story = await Stories.create(req.body);
         res.status(200).json(story);
     } catch (error) {
         res.status(400).json({error: error.message});
