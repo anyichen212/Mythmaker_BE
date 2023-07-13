@@ -12,9 +12,6 @@ const app = express();
 app.use(express.json()); //middleware
 app.use(cors());
 
-//mount on api folder
-app.use("/api", require("./api"));
-
 app.get('/', (req, res) => {
     res.send('On port 8080 successfully');
 })
@@ -35,3 +32,6 @@ mongoose.connect(process.env.MONG_URI)
     .catch((error) => {
         console.log(error);
     })
+
+//mount on api folder
+app.use("/api", require("./api"));

@@ -4,11 +4,12 @@ const router = express.Router();
 const Events = require("../model/events");
 
 //fetch from /api/events, all events
-router.get('/', async (req, res) => {
+router.get('/:storyId', async (req, res) => {
+    const storyId  = req.params.storyId;
 
     try {
         //find all events
-      const allEvents = await Events.find({});
+      const allEvents = await Events.find({ storyId: storyId });
       
       //if all events exist, returns them. Else return error
       allEvents
@@ -20,7 +21,7 @@ router.get('/', async (req, res) => {
  })
 
 //fetch single event 
-router.get('/:id', async (req, res) => {
+router.get('/:storyId/:id', async (req, res) => {
     const id  = req.params.id;
 
     //checks if objectId exist
