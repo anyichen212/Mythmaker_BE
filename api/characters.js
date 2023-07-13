@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
     //the {} will return ALL Characters
     // .sort sorts the Characters 
     //-1 lists Characters in descending order/newest first
-    const allCharacters = await Characters.find({}).sort({createdAt: -1})
+    const allCharacters = await Characters.find({}).sort({name: 1})
 
     allCharacters
     ? res.status(200).json(allCharacters)
