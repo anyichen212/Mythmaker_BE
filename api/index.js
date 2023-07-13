@@ -6,6 +6,7 @@ router.get('/', (req, res) => {
 
 //mounted on /api/
 router.use("/stories", require("./stories"));
+router.use("/events", require("./events"));
 
 router.use("/users", require("./users"));
 
