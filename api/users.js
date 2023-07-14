@@ -1,6 +1,7 @@
 const express = require("express");
 const Users = require('../model/users');
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const passport = require("passport");
 const router = express.Router();
 
 // fetch from api/Users/
@@ -87,5 +88,65 @@ router.patch('/:id', async (req, res) => {
     }
     
 })
+
+//auth routes
+// api/users/auth/login
+router.post('/auth/login', async (req, res, next) => {
+    passport.authenticate('local', (err, user, info) => {
+        if (err) { return next(err); }
+        if (!user) { return res.status(400).json({ message: info.message }); }
+        req.logIn(user, function(err) {
+            if (err) { return next(err); }
+            return res.json(user);
+        });
+    })(req, res, next);
+});
+
+//auth/signup
+router.post('/auth/signup', async(req,res,next)=>{
+    try{
+        const {email, password} = req.body;
+        if(!email || !password){
+            return res.status(400).send("Required fields missing");
+        }
+
+        //check if email is already registered
+        const existingUser = await Users.findOne({ email });
+        if(existingUser){
+            return res.status(400).json({ message: 'Email already registered' });
+        }
+
+        const newUser = new Users({email, password});
+
+        await newUser.save();
+
+        req.login(newUser, err =>{
+            if(err) return next(err);
+            return res.json(newUser);
+        });
+
+    }catch(error){
+        next(error);
+
+    }
+});
+
+//auth/logout
+router.post('/auth/logout', (req,res,next)=>{
+    req.logout();
+    req.session.destroy((err)=>{
+        if(err) return next(err);
+        res.status(200).end();
+    });
+});
+
+//auth/me
+router.get('/auth/me', (req,res) =>{
+    if(req.user){
+        res.json(req.user);
+    }else{
+        res.status(401).end();
+    }
+});
 
 module.exports = router;
