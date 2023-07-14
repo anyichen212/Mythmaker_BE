@@ -132,13 +132,17 @@ router.post('/auth/signup', async(req,res,next)=>{
 });
 
 //auth/logout
-router.post('/auth/logout', (req,res,next)=>{
-    req.logout();
-    req.session.destroy((err)=>{
-        if(err) return next(err);
-        res.status(200).end();
+router.post('/auth/logout', function(req, res){
+    req.logout(function(err){
+      if(err){
+        // An error occurred during the logout process
+        res.status(500).json({ error: 'An error occurred while logging out.' });
+      } else {
+        // Logout was successful
+        res.status(200).json({ message: 'Successfully logged out.' });
+      }
     });
-});
+  });
 
 //auth/me
 router.get('/auth/me', (req,res) =>{
