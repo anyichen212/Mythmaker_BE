@@ -66,7 +66,7 @@ router.delete('/:id', async (req, res) => {
 
     try {
         const storyToDelete = await Stories.deleteOne({_id:id});
-        res.status(201).send("Deleted Successfully : ").json(storyToDelete);
+        res.status(201).json({message: "Deleted Successfully", story: storyToDelete});
     } catch (error) {
         console.log(error);
         res.status(400).json({error: error.message});
