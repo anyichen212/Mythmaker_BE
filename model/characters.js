@@ -8,7 +8,8 @@ const Schema = mongoose.Schema;
 const charactersSchema = new Schema({
     name: {
         type: String,
-        required:true
+        required:true,
+        default: 'narrator'
     }
 });
 

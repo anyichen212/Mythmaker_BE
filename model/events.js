@@ -13,11 +13,13 @@ const optionSchema = new Schema({
 // events schema model
 const eventSchema = new Schema({
     name: {
-        type: String
+        type: String,
+        default:"Untitled Name"
     },
     text: {
         type: String,
         required: true,
+        
     },
     characterId: {
         type: mongoose.Schema.Types.ObjectId,
