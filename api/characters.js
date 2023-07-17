@@ -75,7 +75,7 @@ router.patch('/:id', async (req, res) => {
     try {
         const Character = await Characters.findOneAndUpdate({_id : id}, {
             ...req.body
-        })
+        },{new:true})
 
         // detect if Character update exist
         //will display previous version of Character data
