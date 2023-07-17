@@ -131,6 +131,28 @@ router.patch('/:storyId/:characterId', async (req,res) => {
 
 });
 
+// <<<<<<< hafeefasbranch
+// fetching from stories.js to get the title for now
+router.get('/:id/:userId', async (req, res) => {
+    const userId  = req.params.userId;
+
+    //checks if objectId / userId exist
+    if(!mongoose.Types.ObjectId.isValid(userId)){
+        return res.status(404).json({error:"Story not found"});
+    }
+    try{
+    //const allStories = await Stories.find({}).sort({createdAt: -1})
+    //finds every single story in the database, .sort sorts everything, the createdAt -1 is going to return the most recent story in descending order
+     const storyTitles = await Stories.find({ creatorId: userId }).sort({createdAt: -1});
+ 
+     storyTitles
+     ? res.status(200).json(storyTitles)
+     : res.status(404).json({error:"Story Titles not found"})
+    }catch (error){
+     console.log(error)
+    }
+ })
+// =======
 router.get('/:storyId/events', async (req, res) => {
     const {storyId} = req.params;
 
