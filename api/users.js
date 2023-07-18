@@ -29,7 +29,6 @@ router.get("/:id", async (req, res) => {
       path: "storyHistory",
       transform: doc => doc == null ? null : {Title:doc.title, _id: doc._id}
       
-      
     });
 
     user
@@ -104,11 +103,16 @@ router.post("/auth/login", async (req, res, next) => {
     if (!user) {
       return res.status(400).json({ message: info.message });
     }
-    req.logIn(user, function (err) {
+    req.logIn(user, async function (err) {
       if (err) {
         return next(err);
       }
-      return res.json(user);
+      const Autheduser = await Users.findById(user._id).populate({
+        path: "storyHistory",
+        transform: doc => doc == null ? null : {Title:doc.title, _id: doc._id}
+        
+      });
+      return res.json(Autheduser);
     });
   })(req, res, next);
 });
@@ -154,7 +158,7 @@ router.post("/auth/logout", function (req, res) {
 });
 
 //auth/me
-router.get("/auth/me", (req, res) => {
+router.get("/auth/me", async (req, res) => {
   if (req.user) {
     res.json(req.user);
   } else {
