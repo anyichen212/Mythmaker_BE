@@ -152,26 +152,7 @@ router.get('/:id/:userId', async (req, res) => {
      console.log(error)
     }
  })
-// =======
-router.get('/:storyId/events', async (req, res) => {
-    const {storyId} = req.params;
 
-    //checks if objectId exist
-    if(!mongoose.Types.ObjectId.isValid(storyId)){
-        return res.status(404).json({error:"Story not found"});
-    }
-
-    try{
-        // Fetch the story and populate its events
-        const story = await Stories.findById(storyId).populate('events')
-    
-        story
-        ? res.status(200).json(story.events)
-        : res.status(404).json({error:"Story not found"})
-    }catch (error){
-        console.log("fetch story events error: \n", error)
-    }
-});
 
 
 module.exports = router;
