@@ -37,7 +37,6 @@ const userSchema = new Schema({
         
             type: [mongoose.Schema.Types.ObjectId],
             ref: 'Stories',
-            autopopulate: true,
       
         
     }
