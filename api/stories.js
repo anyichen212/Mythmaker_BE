@@ -1,6 +1,7 @@
 const express = require("express");
 const Stories = require('../model/stories');
-const mongoose = require('mongoose')
+const Users = require('../model/users');
+const mongoose = require('mongoose');
 const router = express.Router();
 
 // fetch from api/stories/
@@ -65,7 +66,19 @@ router.delete('/:id', async (req, res) => {
     }
 
     try {
+        const story = await Stories.findById(id);
+        if(!story) {
+            return res.status(404).json({error:"Story not found"});
+        }
+        //delete the story
         const storyToDelete = await Stories.deleteOne({_id:id});
+
+        //remove the storyId from the creator's storyIds array
+        await Users.findByIdAndUpdate(
+            story.creatorId,
+            {$pull: {storyIds: id}},
+            {new: true}
+        );
         res.status(201).json({message: "Deleted Successfully", story: storyToDelete});
     } catch (error) {
         console.log(error);
