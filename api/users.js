@@ -74,14 +74,18 @@ router.patch('/:id', async (req, res) => {
     }
 
     try {
-        const User = await Users.findOneAndUpdate({_id : id}, {
-            ...req.body
-        })
+        let updateObject = req.body;
+
+        if (req.body.storyId) {
+            updateObject = { $push: { storyIds: req.body.storyId } };
+        }
+
+        const user = await Users.findOneAndUpdate({_id : id}, updateObject, { new: true });
 
         // detect if user update exist
-        //will display previous version of user data
-        User
-        ? res.status(200).json(User)
+        //will display the updated version of user data
+        user
+        ? res.status(200).json(user)
         : res.status(404).json({error:"User not found"})
     } catch (error) {
         console.log(error);
