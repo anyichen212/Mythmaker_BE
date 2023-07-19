@@ -82,7 +82,9 @@ router.patch('/:id', async (req, res) => {
           updateObject = { $push: { storyIds: req.body.storyId } };
       }
 
-      const user = await Users.findOneAndUpdate({_id : id}, updateObject, { new: true });
+      const user = await Users.findOneAndUpdate({_id : id}, updateObject, { new: true }).populate({
+        path: "storyHistory",
+        transform: doc => doc == null ? null : {Title:doc.title, _id: doc._id}});
 
       // detect if user update exist
       //will display the latest version of user data
