@@ -67,30 +67,33 @@ router.delete("/:id", async (req, res) => {
 });
 
 // Patch(update) user
-router.patch("/:id", async (req, res) => {
+router.patch('/:id', async (req, res) => {
   const id = req.params.id;
 
   //checks if objectId exist
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(404).json({ error: "User not found" });
+  if(!mongoose.Types.ObjectId.isValid(id)){
+      return res.status(404).json({error:"User not found"});
   }
 
-    try {
-        const user = await Users.findOneAndUpdate({_id : id}, {
-            ...req.body
-        })
+  try {
+      let updateObject = req.body;
 
-        // detect if user update exist
-        //will display the updated version of user data
-        user
-        ? res.status(200).json(user)
-        : res.status(404).json({error:"User not found"})
-    } catch (error) {
-        console.log(error);
-    }
-    
+      if (req.body.storyId) {
+          updateObject = { $push: { storyIds: req.body.storyId } };
+      }
+
+      const user = await Users.findOneAndUpdate({_id : id}, updateObject, { new: true });
+
+      // detect if user update exist
+      //will display the latest version of user data
+      user
+      ? res.status(200).json(user)
+      : res.status(404).json({error:"User not found"})
+  } catch (error) {
+      console.log(error);
+  }
+  
 })
-
 //auth routes
 // api/users/auth/login
 router.post("/auth/login", async (req, res, next) => {
