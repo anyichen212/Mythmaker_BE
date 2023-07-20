@@ -11,6 +11,9 @@ const Users = require('./model/users');
 //import from dotenv
 require("dotenv").config();
 
+//importing passport file
+const passportSetup = require("./passport")
+
 const app = express();
 
 //express session
@@ -58,6 +61,9 @@ app.use("/api", require("./api"));
 app.get('/', (req, res) => {
     res.send('On port 8080 successfully');
 })
+
+//the third the change
+app.use("/auth", require("./routes/auth"));
 
 //run server
 const serverRun = () => {
