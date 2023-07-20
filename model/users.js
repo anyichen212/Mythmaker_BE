@@ -16,11 +16,11 @@ const userSchema = new Schema({
     email: {
         type: String,
         unique:true,
-        required:true,
+        required:false,
     },
     password: {
         type: String,
-        required: true
+        required: false
     },
     //salt is the unique id generate combine to the password to encrypt password
     salt:{
