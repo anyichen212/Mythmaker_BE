@@ -11,6 +11,9 @@ const Users = require('./model/users');
 //import from dotenv
 require("dotenv").config();
 
+//importing passport file
+const passportSetup = require("./passport")
+
 const app = express();
 
 //express session
