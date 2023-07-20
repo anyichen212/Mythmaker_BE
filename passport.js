@@ -12,8 +12,9 @@ const passport = require("passport");
 passport.use(new GoogleStrategy({
   clientID: GOOGLE_CLIENT_ID,
   clientSecret: GOOGLE_CLIENT_SECRET,
-  callbackURL: "http://www.example.com/auth/google/callback"
+  callbackURL: "http://localhost:8080/auth/google/callback"
 },
+
 async function(accessToken, refreshToken, profile, cb) {
   try {
       let user = await Users.findOne({ googleId: profile.id });
@@ -24,7 +25,9 @@ async function(accessToken, refreshToken, profile, cb) {
           // if the user isn't in our database, create a new user
           user = await Users.create({
               username: profile.displayName,
-              googleId: profile.id
+              googleId: profile.id,
+               email : profile.emails || "",
+               password : profile.password || ""
           });
 
           cb(null, user);
@@ -33,3 +36,4 @@ async function(accessToken, refreshToken, profile, cb) {
       cb(error, null);
   }
 }));
+
