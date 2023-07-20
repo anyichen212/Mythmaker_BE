@@ -18,10 +18,10 @@ router.use((req, res, next) => {
     next(error);
   });
   
-//auth login
-router.get('/auth',(req, res)=>{
-  res.render('auth')
-})
+// //auth login
+// router.get('/auth',(req, res)=>{
+//   res.render('auth')
+// })
 
 
 module.exports = router;
