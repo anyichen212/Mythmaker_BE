@@ -17,16 +17,16 @@ passport.use(new GoogleStrategy({
 
 async function(accessToken, refreshToken, profile, cb) {
   try {
-      let user = await Users.findOne({ googleId: profile.id });
+      let user = await Users.findOne({ emails: profile.emails[0].value, googleId: profile.id });
       if(user) {
           // if the user is found, return it
           cb(null, user);
       } else {
-          // if the user isn't in our database, create a new user
+        
           user = await Users.create({
               username: profile.displayName,
               googleId: profile.id,
-               email : profile.emails || "",
+               email : profile.emails[0].value || "",
                password : profile.password || ""
           });
 
