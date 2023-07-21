@@ -32,7 +32,7 @@ const storySchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Users', //ref from users model
         required: true,
-        autopopulate: true
+        //autopopulate: true
     }
 }, { timestamps: true });
 
