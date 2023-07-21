@@ -60,7 +60,9 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser(async (id, done) => {
-  const user = await Users.findById(id);
+  const user = await Users.findById(id).populate({
+        path: "storyHistory",
+        transform: doc => doc == null ? null : {Title:doc.title, _id: doc._id}});
   done(null, user);
 });
 

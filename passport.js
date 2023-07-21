@@ -17,7 +17,13 @@ passport.use(new GoogleStrategy({
 
 async function(accessToken, refreshToken, profile, cb) {
   try {
-      let user = await Users.findOne({ emails: profile.emails[0].value, googleId: profile.id });
+      let user = await Users.findOne({ email: profile.emails[0].value, googleId: profile.id })
+      ?.populate({
+        path: "storyHistory",
+        transform: doc => doc == null ? null : {Title:doc.title, _id: doc._id}});
+
+        //console.log(user);
+
       if(user) {
           // if the user is found, return it
           cb(null, user);
