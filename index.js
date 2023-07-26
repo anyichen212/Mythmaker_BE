@@ -7,6 +7,7 @@ const session = require("express-session");
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const Users = require("./model/users");
+var MongoDBStore = require('connect-mongodb-session')(session);
 
 //import from dotenv
 require("dotenv").config();
@@ -24,12 +25,28 @@ app.use(
     })
   );
 
+  //initialize store
+const store = new MongoDBStore({
+  uri: process.env.MONG_URI,
+  collection: 'mySessions'
+});
+
+// Catch errors
+store.on('error', function(error) {
+  console.log(error);
+});
+
 //express session
 app.use(
   session({
+    store: store,
     secret: "mythmaker",
     resave: false,
     saveUninitialized: false,
+    cookie: {
+      maxAge: null
+      //maxAge: 1000 * 60 * 60 * 24 * 7 ,
+    },
   })
 );
 

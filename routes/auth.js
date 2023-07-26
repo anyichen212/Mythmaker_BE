@@ -5,7 +5,7 @@ const CLIENT_URL = "http://localhost:3000/home";
 
 router.get("/login/success", (req, res) => {
   console.log("LOGIN SUCCESS HIT ", req.user, req.isAuthenticated());
-  if (req.user) {
+  if (req.isAuthenticated()) {
     res.status(200).json({
       sucess: true,
       message: "successful",

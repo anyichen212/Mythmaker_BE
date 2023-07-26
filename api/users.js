@@ -165,6 +165,7 @@ router.post("/auth/logout", function (req, res) {
       console.log("COOKIE CLEARED")
       // removes cookies in the client side, basically setting the expiration to the past and let browser automatically delete it
       res.clearCookie("connect.sid");
+      res.clearCookie("g_state");
 
       res.status(200).send("Logout Success!");
        
