@@ -4,14 +4,13 @@ const passport = require("passport");
 const CLIENT_URL = "http://localhost:3000/home";
 
 router.get("/login/success", (req, res) => {
-  console.log("LOGIN SUCCESS HIT");
-  if (req.user) {
+  console.log("LOGIN SUCCESS HIT ", req.user, req.isAuthenticated());
+  if (req.isAuthenticated()) {
     res.status(200).json({
       sucess: true,
       message: "successful",
       user: req.user,
     });
-    
   }
 });
 //
@@ -23,7 +22,10 @@ router.get("/login/failed", (req, res) => {
   });
 });
 
-router.get("/google", passport.authenticate("google", { scope: ["profile", "email"] }));
+router.get(
+  "/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
 
 //the forth change
 router.get(
