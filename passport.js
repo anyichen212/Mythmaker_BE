@@ -17,6 +17,7 @@ passport.use(new GoogleStrategy({
 
 async function(accessToken, refreshToken, profile, cb) {
   try {
+    console.log(accessToken)
       let user = await Users.findOne({ email: profile.emails[0].value, googleId: profile.id })
       ?.populate({
         path: "storyHistory",

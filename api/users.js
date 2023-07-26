@@ -27,8 +27,8 @@ router.get("/:id", async (req, res) => {
   try {
     const user = await Users.findById(id).populate({
       path: "storyHistory",
-      transform: doc => doc == null ? null : {Title:doc.title, _id: doc._id}
-      
+      transform: (doc) =>
+        doc == null ? null : { Title: doc.title, _id: doc._id },
     });
 
     user
@@ -67,35 +67,38 @@ router.delete("/:id", async (req, res) => {
 });
 
 // Patch(update) user
-router.patch('/:id', async (req, res) => {
+router.patch("/:id", async (req, res) => {
   const id = req.params.id;
 
   //checks if objectId exist
-  if(!mongoose.Types.ObjectId.isValid(id)){
-      return res.status(404).json({error:"User not found"});
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ error: "User not found" });
   }
 
   try {
-      let updateObject = req.body;
+    let updateObject = req.body;
 
-      if (req.body.storyId) {
-          updateObject = { $push: { storyIds: req.body.storyId } };
-      }
+    if (req.body.storyId) {
+      updateObject = { $push: { storyIds: req.body.storyId } };
+    }
 
-      const user = await Users.findOneAndUpdate({_id : id}, updateObject, { new: true }).populate({
-        path: "storyHistory",
-        transform: doc => doc == null ? null : {Title:doc.title, _id: doc._id}});
+    const user = await Users.findOneAndUpdate({ _id: id }, updateObject, {
+      new: true,
+    }).populate({
+      path: "storyHistory",
+      transform: (doc) =>
+        doc == null ? null : { Title: doc.title, _id: doc._id },
+    });
 
-      // detect if user update exist
-      //will display the latest version of user data
-      user
+    // detect if user update exist
+    //will display the latest version of user data
+    user
       ? res.status(200).json(user)
-      : res.status(404).json({error:"User not found"})
+      : res.status(404).json({ error: "User not found" });
   } catch (error) {
-      console.log(error);
+    console.log(error);
   }
-  
-})
+});
 //auth routes
 // api/users/auth/login
 router.post("/auth/login", async (req, res, next) => {
@@ -112,8 +115,8 @@ router.post("/auth/login", async (req, res, next) => {
       }
       const Autheduser = await Users.findById(user._id).populate({
         path: "storyHistory",
-        transform: doc => doc == null ? null : {Title:doc.title, _id: doc._id}
-        
+        transform: (doc) =>
+          doc == null ? null : { Title: doc.title, _id: doc._id },
       });
       return res.json(Autheduser);
     });
@@ -150,19 +153,31 @@ router.post("/auth/signup", async (req, res, next) => {
 //auth/logout
 router.post("/auth/logout", function (req, res) {
   req.logout(function (err) {
+    // destroys session from the server side
     if (err) {
       // An error occurred during the logout process
-      res.status(500).json({ error: "An error occurred while logging out." });
-    } else {
-      // Logout was successful
-      res.status(200).json({ message: "Successfully logged out." });
+    res.status(500).json({ error: "An error occurred while logging out." });
     }
+    req.session.destroy(function (err) {
+      if (err) {
+        return next(err);
+      }
+      console.log("COOKIE CLEARED")
+      // removes cookies in the client side, basically setting the expiration to the past and let browser automatically delete it
+      res.clearCookie("connect.sid");
+
+      res.status(200).send("Logout Success!");
+       
+    });
+    
+    
   });
 });
 
 //auth/me
 router.get("/auth/me", async (req, res) => {
-  if (req.user) {
+  console.log(req.isAuthenticated())
+  if (req.isAuthenticated()) {
     res.json(req.user);
   } else {
     res.status(401).end();
