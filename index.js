@@ -1,3 +1,6 @@
+//import from dotenv
+require("dotenv").config();
+
 //imports
 const express = require("express");
 const cors = require("cors"); //for cors security
@@ -9,8 +12,8 @@ const LocalStrategy = require("passport-local").Strategy;
 const Users = require("./model/users");
 var MongoDBStore = require('connect-mongodb-session')(session);
 
-//import from dotenv
-require("dotenv").config();
+//import cookie
+const cookie = require("./config/cookie")
 
 //importing passport file
 const passportSetup = require("./passport");
@@ -19,11 +22,16 @@ const app = express();
 
 app.use(
     cors({
-      origin: "http://localhost:3000",
+      origin: process.env.FRONTEND_URL || "http://localhost:3000",
       methods: "GET,POST,PUT,DELETE,PATCH",
       credentials: true,
+      allowedHeaders: "Authorization, X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version",
+      preflightContinue: true,
     })
   );
+
+// trust proxy from hosting services like vercel to send cookies over https
+app.enable("trust proxy");
 
   //initialize store
 const store = new MongoDBStore({
@@ -43,10 +51,7 @@ app.use(
     secret: "mythmaker",
     resave: false,
     saveUninitialized: false,
-    cookie: {
-      maxAge: null
-      //maxAge: 1000 * 60 * 60 * 24 * 7 ,
-    },
+    cookie: cookie,
   })
 );
 
