@@ -19,7 +19,7 @@ const app = express();
 
 app.use(
     cors({
-      origin: ["http://localhost:3000/", "https://mythmaker.vercel.app/"],
+      origin: "https://mythmaker.netlify.app/",
       methods: "GET,POST,PUT,DELETE,PATCH",
       credentials: true,
     })
