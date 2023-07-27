@@ -1,5 +1,5 @@
 const GoogleStrategy = require(`passport-google-oauth20`).Strategy;
-
+require("dotenv").config();
 
 
 //change import user
@@ -11,7 +11,7 @@ const passport = require("passport");
 passport.use(new GoogleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  callbackURL: "http://localhost:8080/auth/google/callback"
+  callbackURL: `${process.env.BACKEND_URL}auth/google/callback`
 },
 
 async function(accessToken, refreshToken, profile, cb) {
