@@ -13,4 +13,4 @@ const cookie = process.env.NODE_ENV == "production" ? {
     sameSite: false,
   };
 
-  module.exports = cookie;
+module.exports = cookie;

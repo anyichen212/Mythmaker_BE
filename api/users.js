@@ -3,6 +3,7 @@ const Users = require("../model/users");
 const mongoose = require("mongoose");
 const passport = require("passport");
 const router = express.Router();
+const cookie = require("../config/cookie");
 
 // fetch from api/Users/
 router.get("/", async (req, res) => {
@@ -164,7 +165,7 @@ router.post("/auth/logout", function (req, res) {
       }
       console.log("COOKIE CLEARED")
       // removes cookies in the client side, basically setting the expiration to the past and let browser automatically delete it
-      res.clearCookie("connect.sid");
+      res.clearCookie("connect.sid", {...cookie, maxAge: 0} );
       res.clearCookie("g_state");
 
       res.status(200).send("Logout Success!");
