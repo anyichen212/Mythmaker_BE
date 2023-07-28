@@ -1,6 +1,6 @@
 {
     "version": 2,
-    "name": "mythmaker",
+    "name": "mythmakers",
     "builds": [
        { "src": "index.js", "use": "@vercel/node" }
     ],
