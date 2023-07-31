@@ -92,7 +92,7 @@ passport.deserializeUser(async (id, done) => {
 app.use("/api", require("./api"));
 
 app.get("/", (req, res) => {
-  res.send("On port 8080 successfully");
+  res.send("Welcome to MythMaker's RestAPI!");
 });
 
 

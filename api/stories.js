@@ -144,7 +144,6 @@ router.patch('/:storyId/:characterId', async (req,res) => {
 
 });
 
-// <<<<<<< hafeefasbranch
 // fetching from stories.js to get the title for now
 router.get('/:id/:userId', async (req, res) => {
     const userId  = req.params.userId;
